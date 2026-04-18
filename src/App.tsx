@@ -145,7 +145,7 @@ function App() {
               <div className="flex flex-col items-center">
                 <span className="text-[10px] uppercase text-gray-400 font-bold">India Avg AQI</span>
                 <span className={`text-sm font-mono font-bold ${avgAqi > 200 ? 'text-red-400' : 'text-yellow-400'}`}>{avgAqi}</span>
-            </div>
+              </div>
             <div className="flex flex-col items-center border-l border-white/10 pl-6">
               <span className="text-[10px] uppercase text-gray-400 font-bold">Active Nodes</span>
               <span className="text-sm font-mono font-bold text-primary">{INDIA_MOCK_DATA.length}</span>
@@ -258,9 +258,9 @@ function SharedPopup({ loc, emColor }: { loc: any, emColor: string }) {
             Emissions: {loc.emission}
           </span>
           <span className={`text-[10px] px-2 py-0.5 rounded border bg-black/40 ${loc.aqi > 200 ? 'border-red-500 text-red-500' : 'border-yellow-500 text-yellow-500'}`}>
-          AQI: {loc.aqi}
-        </span>
-      </div>
+            AQI: {loc.aqi}
+          </span>
+        </div>
 
       <div className="grid grid-cols-2 gap-2 mb-4 bg-black/30 p-2 rounded border border-white/5">
         <div>
@@ -292,7 +292,7 @@ function SharedPopup({ loc, emColor }: { loc: any, emColor: string }) {
         </div>
       )}
     </div>
-    </Popup >
+    </Popup>
   );
 }
 
@@ -327,3 +327,4 @@ function ToggleSwitch({ label, active, onChange }: { label: string, active: bool
 }
 
 export default App;
+
