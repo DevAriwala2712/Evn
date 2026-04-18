@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap, CircleMarker } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { Shield, Leaf, Factory, Zap, TrendingDown, Layers, Activity } from 'lucide-react';
+import { Shield, Leaf, Factory, Zap, TrendingDown, Layers, Activity, AlertTriangle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { INDIA_MOCK_DATA } from './data/mockData';
 
@@ -56,6 +56,16 @@ const createTechIcon = (tech: string) => {
   });
 }
 
+const createRegulationIcon = (status: string) => {
+  const isLocked = status.includes('Locked');
+  return L.divIcon({
+    className: 'custom-div-icon bg-transparent border-0',
+    html: `<div style="font-size: 24px; filter: drop-shadow(0 0 5px ${isLocked ? 'red' : 'yellow'});">${isLocked ? '⛔' : '🚧'}</div>`,
+    iconSize: [24, 24],
+    iconAnchor: [12, 12],
+  });
+};
+
 function MapZoomController() {
   const map = useMap();
   useEffect(() => {
@@ -76,6 +86,7 @@ function App() {
   const [showAQI, setShowAQI] = useState(false);
   const [showRisks, setShowRisks] = useState(false);
   const [showTech, setShowTech] = useState(false);
+  const [showRegulations, setShowRegulations] = useState(false);
 
   // Global AQI calculation simply for the top bar based on mock data
   const avgAqi = Math.round(INDIA_MOCK_DATA.reduce((acc, curr) => acc + curr.aqi, 0) / INDIA_MOCK_DATA.length);
@@ -113,6 +124,7 @@ function App() {
                 <ToggleSwitch label="Air Quality Index (AQI)" active={showAQI} onChange={() => setShowAQI(!showAQI)} />
                 <ToggleSwitch label="Climate Risks" active={showRisks} onChange={() => setShowRisks(!showRisks)} />
                 <ToggleSwitch label="Green Tech Suitability" active={showTech} onChange={() => setShowTech(!showTech)} />
+                <ToggleSwitch label="Regulations / Restricted" active={showRegulations} onChange={() => setShowRegulations(!showRegulations)} />
               </div>
             </motion.div>
           )}
@@ -178,8 +190,11 @@ function App() {
                 <MapZoomController />
 
                 {INDIA_MOCK_DATA.map((loc) => {
-                  // Emissions Layer Logic
-                  const emColor = loc.emission === 'High' || loc.emission === 'Critical' ? '#ef4444' : loc.emission === 'Medium' ? '#eab308' : '#39FF14';
+                  // Emissions Layer Logic (Grey if Locked)
+                  const isLocked = loc.permissionStatus?.includes('Locked');
+                  const emColor = isLocked 
+                      ? '#6b7280' 
+                      : loc.emission === 'High' || loc.emission === 'Critical' ? '#ef4444' : loc.emission === 'Medium' ? '#eab308' : '#39FF14';
 
                   // AQI Layer Logic
                   const aqiColor = loc.aqi > 300 ? '#7f1d1d' : loc.aqi > 200 ? '#b91c1c' : loc.aqi > 100 ? '#d97706' : '#15803d';
@@ -196,7 +211,7 @@ function App() {
                       )}
 
                       {/* 2. Primary Emissions Marker Layer */}
-                      {(showEmissions || (!showAQI && !showRisks && !showTech)) && (
+                      {(showEmissions || (!showAQI && !showRisks && !showTech && !showRegulations)) && (
                         <Marker position={loc.position} icon={createCustomIcon(emColor)}>
                           <SharedPopup loc={loc} emColor={emColor} />
                         </Marker>
@@ -212,6 +227,13 @@ function App() {
                       {/* 4. Green Tech Suitability Layer */}
                       {showTech && loc.suitability === 'Optimal' && (
                         <Marker position={[loc.position[0] + 0.1, loc.position[1] - 0.1]} icon={createTechIcon(loc.bestGreenTech)}>
+                          <SharedPopup loc={loc} emColor={emColor} />
+                        </Marker>
+                      )}
+
+                      {/* 5. Regulations Layer */}
+                      {showRegulations && loc.permissionStatus && (
+                        <Marker position={[loc.position[0] - 0.1, loc.position[1] - 0.1]} icon={createRegulationIcon(loc.permissionStatus)}>
                           <SharedPopup loc={loc} emColor={emColor} />
                         </Marker>
                       )}
@@ -272,6 +294,13 @@ function SharedPopup({ loc, emColor }: { loc: any, emColor: string }) {
           <p className="text-xs font-semibold">{loc.climateRiskType} ({loc.climateRiskLevel})</p>
         </div>
       </div>
+
+      {loc.permissionStatus && (
+         <div className={`mb-3 flex items-center justify-center p-1.5 rounded text-[10px] font-bold uppercase tracking-wider text-center ${loc.permissionStatus.includes('Locked') ? 'bg-red-500/10 text-red-400 border border-red-500/20' : 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20'}`}>
+           <AlertTriangle size={12} className="mr-1" />
+           {loc.permissionStatus}
+         </div>
+      )}
 
       <div className="mb-2">
         <p className="text-[10px] text-primary font-bold mb-1 uppercase tracking-wider flex items-center gap-1">
