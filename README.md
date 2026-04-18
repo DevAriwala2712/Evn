@@ -1,73 +1,54 @@
-# React + TypeScript + Vite
+# ClimateGuard (Evn) - Planetary Command
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+ClimateGuard is a dark-themed, futuristic web application designed to act as a command center for environmental impact. It allows users to track carbon emissions, explore verified carbon offset credits, and simulate AI-optimized green technology implementations across diverse zones.
 
-Currently, two official plugins are available:
+This project is built using:
+- **React 19**
+- **TypeScript**
+- **Vite**
+- **Tailwind CSS**
+- **Leaflet & React-Leaflet** for interactive mapping
+- **Framer Motion** for animations
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Current Features (Phase 0/1)
+- **Interactive Map:** Hover and explore emission data, AQI levels, climate risks, and green tech suitability across 20+ functional nodes in India.
+- **Layers:** Dynamically switch map layers (Emissions, AQI Heatmaps, Climate Risks, Tech Suitability).
+- **AI Simulator:** (Mock) Select regions and budget constraints to generate AI-driven mitigation steps and ROI projections.
+- **Carbon Market:** (Mock) View and filter tokenized, verified real-world emission reduction projects to purchase credits.
+- **Impact Dashboard:** Gamified tracking of offsets and enterprise ESG metrics with dynamic badges and progress rings.
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## How to Run Locally
 
-## Expanding the ESLint configuration
+Follow these steps to run the application on your machine:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 1. Prerequisites
+Make sure you have [Node.js](https://nodejs.org/) and `npm` installed. You can verify this by running:
+```bash
+node -v
+npm -v
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 2. Install Dependencies
+Open your terminal, navigate to the project directory, and install the required NPM packages.
+```bash
+npm install
 ```
+
+### 3. Start the Development Server
+Run the Vite development server.
+```bash
+npm run dev
+```
+
+### 4. View in Browser
+By default, Vite will start the server on `http://localhost:5173`. Open this URL in your web browser to view your local version of the app.
+
+---
+
+## Moving Forward (Upcoming Phases)
+- Hooking the Simulator to generative LLM APIs (e.g. OpenAI/Gemini).
+- Integrating the GetBags SDK for crypto/fiat carbon credit transactions.
+- Replacing mock map data with real-time API integrations (OpenWeatherMap, CPCB AQI).
+- Deploying a backend database (Firebase/Supabase) to store registered user profiles and their purchased offsets.

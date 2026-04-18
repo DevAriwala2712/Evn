@@ -2,14 +2,14 @@ import { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap, CircleMarker } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { Shield, Leaf, Factory, Zap, TrendingDown, Layers, Activity, AlertTriangle, Droplets, Sun, Wind } from 'lucide-react';
+import { Shield, Leaf, Factory, Zap, TrendingDown, Layers, Activity } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { INDIA_MOCK_DATA } from './data/mockData';
 
 // Subcomponents
-import AISimulator from 'public/components/AISimulator';
-import CarbonMarket from 'public/components/CarbonMarket';
-import ImpactDashboard from 'public/components/ImpactDashboard';
+import AISimulator from './components/AISimulator';
+import CarbonMarket from './components/CarbonMarket';
+import ImpactDashboard from './components/ImpactDashboard';
 
 // Fix Leaflet icons
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -144,7 +144,7 @@ function App() {
             <div className="glass-panel px-6 py-3 rounded-full flex gap-8 pointer-events-auto shadow-2xl border border-white/10 ml-auto backdrop-blur-md bg-black/60">
               <div className="flex flex-col items-center">
                 <span className="text-[10px] uppercase text-gray-400 font-bold">India Avg AQI</span>
-                <span className={\`text-sm font-mono font-bold \${avgAqi > 200 ? 'text-red-400' : 'text-yellow-400'}\`}>{avgAqi}</span>
+                <span className={`text-sm font-mono font-bold ${avgAqi > 200 ? 'text-red-400' : 'text-yellow-400'}`}>{avgAqi}</span>
             </div>
             <div className="flex flex-col items-center border-l border-white/10 pl-6">
               <span className="text-[10px] uppercase text-gray-400 font-bold">Active Nodes</span>
@@ -257,7 +257,7 @@ function SharedPopup({ loc, emColor }: { loc: any, emColor: string }) {
           <span className="text-[10px] px-2 py-0.5 rounded border bg-black/40" style={{ borderColor: emColor, color: emColor }}>
             Emissions: {loc.emission}
           </span>
-          <span className={\`text-[10px] px-2 py-0.5 rounded border bg-black/40 \${loc.aqi > 200 ? 'border-red-500 text-red-500' : 'border-yellow-500 text-yellow-500'}\`}>
+          <span className={`text-[10px] px-2 py-0.5 rounded border bg-black/40 ${loc.aqi > 200 ? 'border-red-500 text-red-500' : 'border-yellow-500 text-yellow-500'}`}>
           AQI: {loc.aqi}
         </span>
       </div>
@@ -300,11 +300,11 @@ function NavButton({ active, onClick, icon, label }: { active: boolean, onClick:
   return (
     <button
       onClick={onClick}
-      className={\`flex items-center gap-3 px-4 py-3 rounded-lg transition-all w-full text-left \${
+      className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all w-full text-left ${
         active 
           ? 'bg-primary/10 text-primary border border-primary/30 shadow-[inset_0_0_10px_rgba(57,255,20,0.1)]' 
           : 'text-gray-400 hover:bg-white/5 hover:text-white border border-transparent'
-      }\`}
+      }`}
     >
       {icon}
       <span className="font-semibold text-sm tracking-wide">{label}</span>
@@ -319,8 +319,8 @@ function ToggleSwitch({ label, active, onChange }: { label: string, active: bool
       <div className="text-xs font-medium text-gray-300 group-hover:text-white transition-colors">{label}</div>
       <div className="relative">
         <input type="checkbox" className="sr-only" checked={active} onChange={onChange} />
-        <div className={\`block w-9 h-5 rounded-full transition-colors border \${active ? 'bg-primary/30 border-primary' : 'bg-gray-800 border-gray-600'}\`}></div>
-        <div className={\`dot absolute left-0.5 top-0.5 bg-white w-4 h-4 rounded-full transition-transform shadow-sm \${active ? 'transform translate-x-4 bg-primary shadow-[0_0_5px_rgba(57,255,20,0.8)]' : 'bg-gray-400'}\`}></div>
+        <div className={`block w-9 h-5 rounded-full transition-colors border ${active ? 'bg-primary/30 border-primary' : 'bg-gray-800 border-gray-600'}`}></div>
+        <div className={`dot absolute left-0.5 top-0.5 bg-white w-4 h-4 rounded-full transition-transform shadow-sm ${active ? 'transform translate-x-4 bg-primary shadow-[0_0_5px_rgba(57,255,20,0.8)]' : 'bg-gray-400'}`}></div>
       </div>
     </label>
   );

@@ -1,4 +1,4 @@
-import { LocationData } from '../types';
+import type { LocationData } from '../types';
 
 export const INDIA_MOCK_DATA: LocationData[] = [
   // North India
@@ -117,7 +117,7 @@ export const INDIA_MOCK_DATA: LocationData[] = [
     id: 15, position: [22.8046, 86.2029], name: "Jamshedpur Steel City",
     emission: "Critical", impact: "Severe Red", aqi: 320, type: "Steel Production",
     climateRiskType: "Heatwave", climateRiskLevel: "Moderate",
-    bestGreenTech: "Carbon Capture", suitability: "Opimal", // Optional fix typo later if needed, leaving as is. Actually fixing: "Optimal"
+    bestGreenTech: "Carbon Capture", suitability: "Optimal", // Optional fix typo later if needed, leaving as is. Actually fixing: "Optimal"
     suggestions: ["Electric Arc Furnaces (EAF)", "Carbon Capture utilization", "Slag recycling initiatives"]
   },
   {
