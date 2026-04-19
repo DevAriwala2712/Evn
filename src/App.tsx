@@ -5,7 +5,7 @@ import Login from './components/Login';
 import { MapContainer, TileLayer, Marker, Popup, useMap, CircleMarker } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { Sprout, Hexagon, Leaf, Factory, Zap, TrendingDown, Layers, Activity, AlertTriangle, Briefcase, Sun, Moon } from 'lucide-react';
+import { Sprout, Leaf, Factory, Zap, TrendingDown, Layers, Activity, AlertTriangle, Briefcase, Sun, Moon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { INDIA_MOCK_DATA } from './data/mockData';
 

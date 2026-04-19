@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Sprout, Zap, Lock, MapPin, Database, Info } from 'lucide-react';
+import { Sprout, Zap, Lock, MapPin, Database } from 'lucide-react';
 import { processDummyLogin } from '../services/firebase';
 
 export default function Login() {
