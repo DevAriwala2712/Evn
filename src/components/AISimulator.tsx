@@ -21,7 +21,7 @@ export default function AISimulator() {
       setResultsData(aiResponse);
     } catch (e) {
       console.error(e);
-      setError("AI Generation Failed. Make sure you set VITE_GEMINI_API_KEY in .env.local.");
+      setError(`AI Generation Failed: ${e instanceof Error ? e.message : e}`);
     } finally {
       setAnalyzing(false);
     }
