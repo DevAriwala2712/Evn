@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { type User, onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth } from './services/firebase';
 import Login from './components/Login';
 import { MapContainer, TileLayer, Marker, Popup, useMap, CircleMarker } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { Sprout, Hexagon, Leaf, Factory, Zap, TrendingDown, Layers, Activity, AlertTriangle, Briefcase, Sun, Moon } from 'lucide-react';
+import { Sprout, Leaf, Factory, Zap, TrendingDown, Layers, Activity, AlertTriangle, Briefcase, Sun, Moon, Radio } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { INDIA_MOCK_DATA } from './data/mockData';
 
@@ -82,11 +82,136 @@ function MapZoomController() {
   return null;
 }
 
+// --- Live WAQI Station Layer ---
+interface WaqiStation {
+  uid: number;
+  lat: number;
+  lon: number;
+  aqi: string;
+  station: { name: string };
+}
+
+const aqiColor = (aqi: number) => {
+  if (aqi <= 50) return '#00e400';   // Good
+  if (aqi <= 100) return '#ffff00';  // Moderate
+  if (aqi <= 150) return '#ff7e00';  // Unhealthy for Sensitive Groups
+  if (aqi <= 200) return '#ff0000';  // Unhealthy
+  if (aqi <= 300) return '#8f3f97';  // Very Unhealthy
+  return '#7e0023';                  // Hazardous
+};
+
+const aqiLabel = (aqi: number) => {
+  if (aqi <= 50) return 'Good';
+  if (aqi <= 100) return 'Moderate';
+  if (aqi <= 150) return 'Unhealthy (SG)';
+  if (aqi <= 200) return 'Unhealthy';
+  if (aqi <= 300) return 'Very Unhealthy';
+  return 'Hazardous';
+};
+
+const createLiveAqiIcon = (aqi: number) => {
+  const color = aqiColor(aqi);
+  return L.divIcon({
+    className: '',
+    html: `
+      <div style="
+        background: ${color}22;
+        border: 2px solid ${color};
+        color: ${color};
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 800;
+        font-family: monospace;
+        box-shadow: 0 0 12px ${color}88;
+        backdrop-filter: blur(4px);
+      ">
+        <span>${aqi}</span>
+      </div>`,
+    iconSize: [44, 44],
+    iconAnchor: [22, 22],
+  });
+};
+
+function LiveStationLayer({ token, onLoad }: { token: string; onLoad?: (count: number) => void }) {
+  const [stations, setStations] = useState<WaqiStation[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const fetchStations = useCallback(async () => {
+    setLoading(true);
+    try {
+      // India bounding box: SW(6.75,68.11) to NE(37.1,97.4)
+      const url = `https://api.waqi.info/map/bounds/?latlng=6.75,68.11,37.1,97.4&networks=all&token=${token}`;
+      const res = await fetch(url);
+      const data = await res.json();
+      if (data.status === 'ok') {
+        const valid = data.data.filter((s: WaqiStation) => s.aqi !== '-' && !isNaN(Number(s.aqi)));
+        setStations(valid);
+        onLoad?.(valid.length);
+      }
+    } catch (e) {
+      console.error('WAQI fetch error:', e);
+    }
+    setLoading(false);
+  }, [token, onLoad]);
+
+
+  useEffect(() => {
+    fetchStations();
+    // Refresh every 10 minutes
+    const interval = setInterval(fetchStations, 10 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, [fetchStations]);
+
+  if (loading && stations.length === 0) return null;
+
+  return (
+    <>
+      {stations.map((s) => {
+        const aqiVal = Number(s.aqi);
+        const color = aqiColor(aqiVal);
+        return (
+          <Marker
+            key={s.uid}
+            position={[s.lat, s.lon]}
+            icon={createLiveAqiIcon(aqiVal)}
+          >
+            <Popup className="custom-popup" minWidth={220}>
+              <div className="p-1">
+                <div className="flex items-center gap-2 mb-2">
+                  <Radio size={14} style={{ color }} />
+                  <h3 className="font-bold text-sm" style={{ color }}>LIVE STATION</h3>
+                </div>
+                <p className="font-semibold text-sm mb-2">{s.station.name}</p>
+                <div className="flex items-center justify-between bg-black/30 p-2 rounded border" style={{ borderColor: color + '44' }}>
+                  <span className="text-xs text-gray-400 uppercase tracking-wider">AQI</span>
+                  <span className="text-xl font-mono font-black" style={{ color }}>{aqiVal}</span>
+                </div>
+                <div className="mt-2 text-center text-[10px] font-bold uppercase py-1 px-2 rounded" style={{ background: color + '22', color, border: `1px solid ${color}44` }}>
+                  {aqiLabel(aqiVal)}
+                </div>
+                <p className="text-[10px] text-gray-500 mt-2 text-center">📡 Real-time data · waqi.info</p>
+              </div>
+            </Popup>
+          </Marker>
+        );
+      })}
+    </>
+  );
+}
+
+
 function App() {
   const [user, setUser] = useState<User | null>(null);
   const [authChecking, setAuthChecking] = useState(true);
   const [activeTab, setActiveTab] = useState<'map' | 'simulate' | 'market' | 'dashboard' | 'seller'>('map');
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [liveStationCount, setLiveStationCount] = useState(0);
 
   // Layer states
   const [showEmissions, setShowEmissions] = useState(true);
@@ -111,6 +236,8 @@ function App() {
     });
     return () => unsubscribe();
   }, []);
+  
+  const AQICN_TOKEN = import.meta.env.VITE_AQICN_TOKEN;
 
   // Global AQI calculation simply for the top bar based on mock data
   const avgAqi = Math.round(INDIA_MOCK_DATA.reduce((acc, curr) => acc + curr.aqi, 0) / INDIA_MOCK_DATA.length);
@@ -206,13 +333,23 @@ function App() {
                 <span className="text-[10px] uppercase text-gray-400 font-bold">India Avg AQI</span>
                 <span className={`text-sm font-mono font-bold ${avgAqi > 200 ? 'text-red-400' : 'text-yellow-400'}`}>{avgAqi}</span>
               </div>
-            <div className="flex flex-col items-center border-l border-white/10 pl-6">
-              <span className="text-[10px] uppercase text-gray-400 font-bold">Active Nodes</span>
-              <span className="text-sm font-mono font-bold text-primary">{INDIA_MOCK_DATA.length}</span>
+              <div className="flex flex-col items-center border-l border-white/10 pl-6">
+                <span className="text-[10px] uppercase text-gray-400 font-bold">Active Nodes</span>
+                <span className="text-sm font-mono font-bold text-primary">{INDIA_MOCK_DATA.length}</span>
+              </div>
+              {showAQI && liveStationCount > 0 && (
+                <div className="flex flex-col items-center border-l border-white/10 pl-6">
+                  <span className="text-[10px] uppercase text-gray-400 font-bold flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse inline-block"></span>
+                    Live Stations
+                  </span>
+                  <span className="text-sm font-mono font-bold text-green-400">{liveStationCount}</span>
+                </div>
+              )}
             </div>
           </div>
-          </div>
         )}
+
 
         <div className="flex-1 bg-zinc-900 relative overflow-hidden">
           <AnimatePresence mode="wait">
@@ -238,6 +375,21 @@ function App() {
                 />
                 <MapZoomController />
 
+                {/* AQICN Real-time AQI Tile Layer (correct waqi.info domain) */}
+                {showAQI && AQICN_TOKEN && (
+                  <TileLayer
+                    url={`https://tiles.waqi.info/tiles/usepa-aqi/{z}/{x}/{y}.png?token=${AQICN_TOKEN}`}
+                    attribution='Air Quality Tiles &copy; <a href="https://waqi.info">waqi.info</a>'
+                    zIndex={100}
+                    opacity={0.85}
+                  />
+                )}
+
+                {/* Live Station Markers from WAQI Bounds API */}
+                {showAQI && AQICN_TOKEN && (
+                  <LiveStationLayer token={AQICN_TOKEN} onLoad={setLiveStationCount} />
+                )}
+
                 {INDIA_MOCK_DATA.map((loc) => {
                   // Emissions Layer Logic (Grey if Locked)
                   const isLocked = loc.permissionStatus?.includes('Locked');
@@ -246,16 +398,16 @@ function App() {
                       : loc.emission === 'High' || loc.emission === 'Critical' ? '#ef4444' : loc.emission === 'Medium' ? '#eab308' : '#10b981';
 
                   // AQI Layer Logic
-                  const aqiColor = loc.aqi > 300 ? '#7f1d1d' : loc.aqi > 200 ? '#b91c1c' : loc.aqi > 100 ? '#d97706' : '#15803d';
+                  const mockAqiColor = loc.aqi > 300 ? '#7f1d1d' : loc.aqi > 200 ? '#b91c1c' : loc.aqi > 100 ? '#d97706' : '#15803d';
 
                   return (
                     <div key={loc.id}>
-                      {/* 1. AQI Heatmap Simulation Layer */}
-                      {showAQI && (
+                      {/* 1. AQI Heatmap Simulation Layer (Disabled when real tiles are active) */}
+                      {showAQI && !AQICN_TOKEN && (
                         <CircleMarker
                           center={loc.position}
                           radius={Math.min(loc.aqi / 5, 80)}
-                          pathOptions={{ fillColor: aqiColor, fillOpacity: 0.3, color: 'transparent' }}
+                          pathOptions={{ fillColor: mockAqiColor, fillOpacity: 0.3, color: 'transparent' }}
                         />
                       )}
 
