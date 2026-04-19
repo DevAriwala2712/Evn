@@ -17,6 +17,9 @@ This project is built using:
 - **Carbon Market:** (Mock) View and filter tokenized, verified real-world emission reduction projects to purchase credits.
 - **Impact Dashboard:** Gamified tracking of offsets and enterprise ESG metrics with dynamic badges and progress rings.
 
+## Live Demo
+🚀 **Deploy on Vercel:** [kaitipala-aboamjl5r-devariwala2712s-projects.vercel.app](https://kaitipala-aboamjl5r-devariwala2712s-projects.vercel.app)
+
 ---
 
 ## How to Run Locally
@@ -30,19 +33,29 @@ node -v
 npm -v
 ```
 
-### 2. Install Dependencies
+### 2. Set Up Environment Variables
+This project requires several API keys (Firebase, Gemini, AQICN). 
+1. Create a `.env.local` file in the root directory.
+2. Copy the contents of `.env.example` into `.env.local`.
+3. Fill in your actual API keys.
+
+```bash
+cp .env.example .env.local
+```
+
+### 3. Install Dependencies
 Open your terminal, navigate to the project directory, and install the required NPM packages.
 ```bash
 npm install
 ```
 
-### 3. Start the Development Server
+### 4. Start the Development Server
 Run the Vite development server.
 ```bash
 npm run dev
 ```
 
-### 4. View in Browser
+### 5. View in Browser
 By default, Vite will start the server on `http://localhost:5173`. Open this URL in your web browser to view your local version of the app.
 
 ---
