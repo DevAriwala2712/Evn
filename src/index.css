@@ -13,8 +13,8 @@
     --popover: 240 10% 6%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 112 100% 54%; /* Neon Green */
-    --primary-foreground: 240 5.9% 10%;
+    --primary: 160 84% 39%; /* Carbon Blue */
+    --primary-foreground: 0 0% 100%;
 
     --secondary: 240 8% 12%;
     --secondary-foreground: 0 0% 98%;
@@ -22,15 +22,15 @@
     --muted: 240 8% 12%;
     --muted-foreground: 240 5% 64.9%;
 
-    --accent: 112 100% 54%;
-    --accent-foreground: 240 5.9% 10%;
+    --accent: 160 84% 39%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
 
     --border: 240 8% 16%;
     --input: 240 8% 12%;
-    --ring: 112 100% 54%;
+    --ring: 160 84% 39%;
 
     --radius: 0.5rem;
   }
@@ -54,17 +54,81 @@
 }
 
 .neon-text {
-  text-shadow: 0 0 10px rgba(57, 255, 20, 0.5), 0 0 20px rgba(57, 255, 20, 0.3);
+  font-weight: 800; /* Replaced glow with solid bolding */
 }
 
 .mapboxgl-popup-content {
   background: rgba(15, 15, 20, 0.85) !important;
   backdrop-filter: blur(8px);
   color: white !important;
-  border: 1px solid rgba(57, 255, 20, 0.3) !important;
+  border: 1px solid rgba(16, 185, 129, 0.3) !important;
   border-radius: 8px !important;
 }
 
 .mapboxgl-popup-tip {
   border-top-color: rgba(15, 15, 20, 0.85) !important;
+}
+
+/* Light Mode Overrides */
+.light-mode {
+  background-color: #f9fafb !important;
+  color: #111827 !important;
+}
+
+.light-mode .bg-black {
+  background-color: #f3f4f6 !important;
+}
+
+.light-mode .bg-zinc-900 {
+  background-color: #f9fafb !important;
+}
+
+.light-mode .text-white {
+  color: #111827 !important;
+}
+
+.light-mode .text-gray-400 {
+  color: #4b5563 !important;
+}
+
+.light-mode .text-gray-300 {
+  color: #374151 !important;
+}
+
+.light-mode .bg-black\/40, 
+.light-mode .bg-black\/30,
+.light-mode .bg-black\/20,
+.light-mode .bg-black\/50,
+.light-mode .bg-black\/60,
+.light-mode .bg-black\/80,
+.light-mode .bg-zinc-900\/80 {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.light-mode .bg-white\/5 {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+.light-mode .border-white\/5, 
+.light-mode .border-white\/10,
+.light-mode .border-white\/20,
+.light-mode .border-white\/30 {
+  border-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+.light-mode .glass-panel {
+  background: rgba(255, 255, 255, 0.7) !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+.light-mode input,
+.light-mode textarea,
+.light-mode select {
+    background-color: #ffffff !important;
+    color: #111827 !important;
+    border-color: #d1d5db !important;
+}
+
+.light-mode .neon-text {
+  color: #064e3b !important;
 }

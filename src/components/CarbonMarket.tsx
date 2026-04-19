@@ -49,7 +49,7 @@ export default function CarbonMarket() {
         <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row justify-between items-center bg-black/40 p-4 md:p-6 rounded-2xl border border-white/5 backdrop-blur-md">
            <div>
               <h2 className="text-2xl md:text-3xl font-bold font-mono tracking-wider flex items-center gap-3">
-                <Leaf size={28} className="text-primary" /> MULTI-VENDOR MARKETPLACE
+                <Leaf size={28} className="text-primary" /> KAITIPALA MARKETPLACE
               </h2>
               <p className="text-gray-400 mt-2 text-sm">Compare and aggregate credits from verified global sellers.</p>
            </div>
@@ -70,7 +70,7 @@ export default function CarbonMarket() {
               </div>
               <button 
                 onClick={() => setWalletConnected(!walletConnected)}
-                className={`px-6 py-3 rounded-full font-bold uppercase tracking-wider text-sm transition-all flex items-center gap-2 border ${walletConnected ? 'bg-primary/20 text-primary border-primary shadow-[0_0_15px_rgba(57,255,20,0.3)]' : 'bg-white/5 text-gray-300 border-white/10 hover:border-white/30'}`}
+                className={`px-6 py-3 rounded-full font-bold uppercase tracking-wider text-sm transition-all flex items-center gap-2 border ${walletConnected ? 'bg-primary/20 text-primary border-primary shadow-[0_0_15px_rgba(16,185,129,0.3)]' : 'bg-white/5 text-gray-300 border-white/10 hover:border-white/30'}`}
               >
                 <Wallet size={16} />
                 {walletConnected ? '0x8A...3F9' : 'Connect Wallet'}
@@ -137,7 +137,16 @@ export default function CarbonMarket() {
                 return (
                   <div key={proj.id} className={`glass-panel border rounded-xl overflow-hidden transition-all group flex flex-col bg-zinc-900/80 ${isComparing ? 'border-blue-500/50 shadow-[0_0_15px_rgba(59,130,246,0.2)]' : 'border-white/5 hover:border-primary/50'}`}>
                     <div className="h-40 overflow-hidden relative">
-                      <img src={proj.img} alt={proj.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-60 group-hover:opacity-100" />
+                      <img 
+                        src={`https://picsum.photos/seed/${proj.id}/600/400`} 
+                        alt={proj.title} 
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.onerror = null;
+                          target.src = `https://picsum.photos/seed/${proj.id + 100}/600/400`;
+                        }}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-60 group-hover:opacity-100 bg-zinc-800" 
+                      />
                       
                       {/* Compare Checkbox */}
                       <div 
@@ -186,7 +195,7 @@ export default function CarbonMarket() {
                             const qty = parseInt((document.getElementById(`qty-${proj.id}`) as HTMLInputElement)?.value || '0');
                             if(qty > 0) addToCart(proj.id, qty, proj.price);
                           }}
-                          className="flex-1 bg-white/5 hover:bg-primary hover:text-black text-white py-2 rounded border border-white/10 hover:border-primary transition-all font-bold text-xs tracking-wider flex items-center justify-center gap-2 group-hover:shadow-[0_0_15px_rgba(57,255,20,0.2)]"
+                          className="flex-1 bg-white/5 hover:bg-primary hover:text-black text-white py-2 rounded border border-white/10 hover:border-primary transition-all font-bold text-xs tracking-wider flex items-center justify-center gap-2 group-hover:shadow-[0_0_15px_rgba(16,185,129,0.2)]"
                         >
                           <ShoppingCart size={14} /> ADD
                         </button>
@@ -226,7 +235,7 @@ export default function CarbonMarket() {
                      </div>
                      <button 
                        onClick={handleCheckoutAggregate}
-                       className="bg-primary text-black font-bold tracking-wider uppercase text-sm px-8 py-3 rounded-full hover:bg-white transition-all shadow-[0_0_20px_rgba(57,255,20,0.4)]"
+                       className="bg-primary text-black font-bold tracking-wider uppercase text-sm px-8 py-3 rounded-full hover:bg-white transition-all shadow-[0_0_20px_rgba(16,185,129,0.4)]"
                      >
                        Checkout Bulk
                      </button>
@@ -253,9 +262,18 @@ export default function CarbonMarket() {
                  {comparedProjects.map(proj => {
                     const isLowestCost = proj.price === cheapestComparePrice;
                     return (
-                      <div key={proj.id} className={`flex-1 min-w-[300px] border rounded-xl overflow-hidden bg-black/30 flex flex-col ${isLowestCost ? 'border-primary/50 shadow-[0_0_20px_rgba(57,255,20,0.1)]' : 'border-white/5'}`}>
+                      <div key={proj.id} className={`flex-1 min-w-[300px] border rounded-xl overflow-hidden bg-black/30 flex flex-col ${isLowestCost ? 'border-primary/50 shadow-[0_0_20px_rgba(16,185,129,0.1)]' : 'border-white/5'}`}>
                          <div className="h-32 relative overflow-hidden">
-                           <img src={proj.img} className="w-full h-full object-cover opacity-50" />
+                           <img 
+                             src={`https://picsum.photos/seed/${proj.id}/600/400`} 
+                             alt={proj.title}
+                             onError={(e) => {
+                               const target = e.target as HTMLImageElement;
+                               target.onerror = null;
+                               target.src = `https://picsum.photos/seed/${proj.id + 100}/600/400`;
+                             }}
+                             className="w-full h-full object-cover opacity-50 bg-zinc-800" 
+                           />
                            {isLowestCost && (
                               <div className="absolute top-0 right-0 bg-primary text-black font-bold text-[10px] uppercase px-3 py-1 rounded-bl-lg tracking-wider">
                                 Most Cost Effective

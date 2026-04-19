@@ -136,7 +136,7 @@ export default function SellerHub() {
 
                  <button 
                    disabled={isUploading}
-                   className="w-full bg-primary hover:bg-white text-black font-bold uppercase tracking-wider py-4 mt-4 rounded-md transition-all shadow-[0_0_15px_rgba(57,255,20,0.3)] disabled:opacity-50 flex justify-center items-center gap-2"
+                   className="w-full bg-primary hover:bg-white text-black font-bold uppercase tracking-wider py-4 mt-4 rounded-md transition-all shadow-[0_0_15px_rgba(16,185,129,0.3)] disabled:opacity-50 flex justify-center items-center gap-2"
                  >
                    {isUploading ? <><span className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></span> Processing...</> : 'List on Marketplace'}
                  </button>

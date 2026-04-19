@@ -85,7 +85,7 @@ export default function AISimulator() {
         <button 
           onClick={handleSimulate}
           disabled={analyzing}
-          className="mt-4 w-full bg-primary/20 border border-primary text-primary font-bold uppercase tracking-wider py-3 rounded-md hover:bg-primary hover:text-black transition-all shadow-[0_0_15px_rgba(57,255,20,0.2)] disabled:opacity-50 flex justify-center items-center gap-2"
+          className="mt-4 w-full bg-primary/20 border border-primary text-primary font-bold uppercase tracking-wider py-3 rounded-md hover:bg-primary hover:text-black transition-all shadow-[0_0_15px_rgba(16,185,129,0.2)] disabled:opacity-50 flex justify-center items-center gap-2"
         >
           {analyzing ? (
             <><div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin"></div> Generating...</>
@@ -106,7 +106,7 @@ export default function AISimulator() {
 
         {analyzing && (
           <div className="h-full flex flex-col items-center justify-center text-primary">
-            <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mb-4 shadow-[0_0_15px_rgba(57,255,20,0.5)]"></div>
+            <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mb-4 shadow-[0_0_15px_rgba(16,185,129,0.5)]"></div>
             <p className="font-mono tracking-widest text-sm animate-pulse">Running Generative Model...</p>
             <p className="text-xs text-gray-500 mt-2 font-mono">Analyzing land-use policies & constraints...</p>
           </div>
@@ -144,7 +144,7 @@ export default function AISimulator() {
                 </div>
               </div>
 
-              <div className="glass-panel p-6 rounded-xl border border-primary/20 relative overflow-hidden shadow-[inset_0_0_40px_rgba(57,255,20,0.05)]">
+              <div className="glass-panel p-6 rounded-xl border border-primary/20 relative overflow-hidden shadow-[inset_0_0_40px_rgba(16,185,129,0.05)]">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-primary/20 blur-3xl rounded-full"></div>
                 <h4 className="flex items-center gap-2 text-sm font-bold text-gray-300 uppercase mb-4">
                   <Zap size={16} className="text-primary" /> AI Optimized Path

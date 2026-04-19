@@ -5,7 +5,7 @@ import Login from './components/Login';
 import { MapContainer, TileLayer, Marker, Popup, useMap, CircleMarker } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { Shield, Leaf, Factory, Zap, TrendingDown, Layers, Activity, AlertTriangle, Briefcase } from 'lucide-react';
+import { Sprout, Hexagon, Leaf, Factory, Zap, TrendingDown, Layers, Activity, AlertTriangle, Briefcase, Sun, Moon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { INDIA_MOCK_DATA } from './data/mockData';
 
@@ -52,7 +52,7 @@ const createTechIcon = (tech: string) => {
   return L.divIcon({
     className: 'custom-div-icon',
     html: `
-      <div style="background-color: #111; width: 24px; height: 24px; border-radius: 6px; border: 1px solid #39FF14; display:flex; align-items:center; justify-content:center; color:#39FF14; font-size:12px; font-weight:bold;">
+      <div style="background-color: #111; width: 24px; height: 24px; border-radius: 6px; border: 1px solid #10b981; display:flex; align-items:center; justify-content:center; color:#10b981; font-size:12px; font-weight:bold;">
         ${isSolar ? '☀️' : isWind ? '🌪️' : '🔋'}
       </div>
     `,
@@ -94,6 +94,15 @@ function App() {
   const [showRisks, setShowRisks] = useState(false);
   const [showTech, setShowTech] = useState(false);
   const [showRegulations, setShowRegulations] = useState(false);
+  const [isLightMode, setIsLightMode] = useState(false);
+
+  useEffect(() => {
+    if (isLightMode) {
+      document.documentElement.classList.add('light-mode');
+    } else {
+      document.documentElement.classList.remove('light-mode');
+    }
+  }, [isLightMode]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -109,7 +118,7 @@ function App() {
   if (authChecking) {
     return (
       <div className="w-full h-screen bg-black flex items-center justify-center">
-         <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin shadow-[0_0_15px_rgba(57,255,20,0.5)]"></div>
+         <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin shadow-[0_0_15px_rgba(37,99,235,0.5)]"></div>
       </div>
     );
   }
@@ -129,9 +138,9 @@ function App() {
         className="w-72 glass-panel border-r border-white/10 flex flex-col z-50 absolute md:relative h-full"
       >
         <div className="p-6 flex items-center gap-3 border-b border-white/10">
-          <Shield className="w-8 h-8 text-primary shadow-[0_0_10px_rgba(57,255,20,0.5)] rounded-full" />
+          <Sprout className="w-8 h-8 text-primary shadow-[0_0_10px_rgba(16,185,129,0.5)] rounded-full" />
           <div>
-            <h1 className="text-xl font-bold tracking-wider neon-text font-mono">CLIMATEGUARD</h1>
+            <h1 className="text-xl font-bold tracking-wider neon-text font-mono">KAITIPALA</h1>
             <p className="text-xs text-primary/70 tracking-widest uppercase">Planetary Command</p>
           </div>
         </div>
@@ -163,6 +172,13 @@ function App() {
               <h4 className="text-sm font-semibold text-primary mb-1">Global Offset</h4>
               <div className="text-2xl font-mono font-bold text-white">12.4M <span className="text-sm text-gray-400">Tons</span></div>
             </div>
+            <button 
+              onClick={() => setIsLightMode(!isLightMode)}
+              className="w-full bg-white/5 border border-white/10 font-bold uppercase tracking-wider py-3 rounded-md hover:bg-white/10 transition-colors flex items-center justify-center gap-2 mb-3"
+            >
+              {isLightMode ? <Moon size={16} /> : <Sun size={16} />} 
+              {isLightMode ? 'Dark Mode' : 'Light Mode'}
+            </button>
             <button 
               onClick={() => signOut(auth)}
               className="w-full bg-red-500/10 text-red-500 border border-red-500/20 font-bold uppercase tracking-wider py-3 rounded-md hover:bg-red-500 hover:text-white transition-colors"
@@ -216,7 +232,8 @@ function App() {
                 maxBounds={[[-90, -180], [90, 180]]}
               >
                 <TileLayer
-                  url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+                  key={isLightMode ? 'light' : 'dark'}
+                  url={isLightMode ? "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png" : "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"}
                   attribution='&copy; <a href="https://carto.com/attributions">CARTO</a>'
                 />
                 <MapZoomController />
@@ -226,7 +243,7 @@ function App() {
                   const isLocked = loc.permissionStatus?.includes('Locked');
                   const emColor = isLocked 
                       ? '#6b7280' 
-                      : loc.emission === 'High' || loc.emission === 'Critical' ? '#ef4444' : loc.emission === 'Medium' ? '#eab308' : '#39FF14';
+                      : loc.emission === 'High' || loc.emission === 'Critical' ? '#ef4444' : loc.emission === 'Medium' ? '#eab308' : '#10b981';
 
                   // AQI Layer Logic
                   const aqiColor = loc.aqi > 300 ? '#7f1d1d' : loc.aqi > 200 ? '#b91c1c' : loc.aqi > 100 ? '#d97706' : '#15803d';
@@ -370,13 +387,13 @@ function NavButton({ active, onClick, icon, label }: { active: boolean, onClick:
       onClick={onClick}
       className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all w-full text-left ${
         active 
-          ? 'bg-primary/10 text-primary border border-primary/30 shadow-[inset_0_0_10px_rgba(57,255,20,0.1)]' 
+          ? 'bg-primary/10 text-primary border border-primary/30 shadow-[inset_0_0_10px_rgba(37,99,235,0.1)]' 
           : 'text-gray-400 hover:bg-white/5 hover:text-white border border-transparent'
       }`}
     >
       {icon}
       <span className="font-semibold text-sm tracking-wide">{label}</span>
-      {active && <div className="ml-auto w-1.5 h-4 bg-primary rounded-full shadow-[0_0_5px_rgba(57,255,20,0.8)]"></div>}
+      {active && <div className="ml-auto w-1.5 h-4 bg-primary rounded-full shadow-[0_0_5px_rgba(37,99,235,0.8)]"></div>}
     </button>
   );
 }
