@@ -1,4 +1,7 @@
 import { useState, useEffect } from 'react';
+import { type User, onAuthStateChanged, signOut } from 'firebase/auth';
+import { auth } from './services/firebase';
+import Login from './components/Login';
 import { MapContainer, TileLayer, Marker, Popup, useMap, CircleMarker } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -80,6 +83,8 @@ function MapZoomController() {
 }
 
 function App() {
+  const [user, setUser] = useState<User | null>(null);
+  const [authChecking, setAuthChecking] = useState(true);
   const [activeTab, setActiveTab] = useState<'map' | 'simulate' | 'market' | 'dashboard' | 'seller'>('map');
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
@@ -90,8 +95,28 @@ function App() {
   const [showTech, setShowTech] = useState(false);
   const [showRegulations, setShowRegulations] = useState(false);
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setAuthChecking(false);
+    });
+    return () => unsubscribe();
+  }, []);
+
   // Global AQI calculation simply for the top bar based on mock data
   const avgAqi = Math.round(INDIA_MOCK_DATA.reduce((acc, curr) => acc + curr.aqi, 0) / INDIA_MOCK_DATA.length);
+
+  if (authChecking) {
+    return (
+      <div className="w-full h-screen bg-black flex items-center justify-center">
+         <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin shadow-[0_0_15px_rgba(57,255,20,0.5)]"></div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <Login />;
+  }
 
   return (
     <MarketProvider>
@@ -138,8 +163,11 @@ function App() {
               <h4 className="text-sm font-semibold text-primary mb-1">Global Offset</h4>
               <div className="text-2xl font-mono font-bold text-white">12.4M <span className="text-sm text-gray-400">Tons</span></div>
             </div>
-            <button className="w-full bg-primary text-black font-bold uppercase tracking-wider py-3 rounded-md hover:bg-primary/90 transition-colors shadow-[0_0_15px_rgba(57,255,20,0.3)]">
-              System Settings
+            <button 
+              onClick={() => signOut(auth)}
+              className="w-full bg-red-500/10 text-red-500 border border-red-500/20 font-bold uppercase tracking-wider py-3 rounded-md hover:bg-red-500 hover:text-white transition-colors"
+            >
+              Sign Out
             </button>
           </div>
         </div>
@@ -170,15 +198,15 @@ function App() {
           </div>
         )}
 
-      <div className="flex-1 bg-zinc-900 relative">
-        <AnimatePresence mode="wait">
+        <div className="flex-1 bg-zinc-900 relative overflow-hidden">
+          <AnimatePresence mode="wait">
           {activeTab === 'map' && (
             <motion.div
               key="map"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="w-full h-full"
+              className="w-full h-full absolute inset-0"
             >
               <MapContainer
                 center={[20, 0]}
@@ -249,25 +277,25 @@ function App() {
           )}
 
           {activeTab === 'simulate' && (
-            <motion.div key="simulate" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="w-full h-full">
+            <motion.div key="simulate" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="w-full h-full absolute inset-0">
               <AISimulator />
             </motion.div>
           )}
 
           {activeTab === 'market' && (
-            <motion.div key="market" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="w-full h-full">
+            <motion.div key="market" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="w-full h-full absolute inset-0">
               <CarbonMarket />
             </motion.div>
           )}
 
           {activeTab === 'dashboard' && (
-            <motion.div key="dashboard" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="w-full h-full">
+            <motion.div key="dashboard" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="w-full h-full absolute inset-0">
               <ImpactDashboard />
             </motion.div>
           )}
 
           {activeTab === 'seller' && (
-            <motion.div key="seller" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="w-full h-full">
+            <motion.div key="seller" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="w-full h-full absolute inset-0">
               <SellerHub />
             </motion.div>
           )}

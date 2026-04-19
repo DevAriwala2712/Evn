@@ -3,7 +3,12 @@ import { UploadCloud, CheckCircle2, Factory, TreePine, Leaf, DollarSign } from '
 import { useMarket, type Project } from '../contexts/MarketContext';
 
 export default function SellerHub() {
-  const { addProject } = useMarket();
+  const { projects, addProject } = useMarket();
+
+  // Metrics Logic
+  const myProjects = projects.filter(p => p.seller === 'Agri-Owner / Coop');
+  const activeCount = myProjects.length;
+  // Let's assume total payouts is some fake calculation based on a static string or we leave it 0.00 since this demo doesn't track sales history.
 
   const [formData, setFormData] = useState({
     title: '',
@@ -18,12 +23,11 @@ export default function SellerHub() {
   const [isListed, setIsListed] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsUploading(true);
 
-    // Simulate verification & upload delay
-    setTimeout(() => {
+    try {
       const newProject: Project = {
         id: Date.now(),
         title: formData.title,
@@ -40,13 +44,16 @@ export default function SellerHub() {
         riskRating: 'A (Provisional)',
       };
 
-      addProject(newProject);
+      await addProject(newProject);
       setIsUploading(false);
       setIsListed(true);
 
       setTimeout(() => setIsListed(false), 5000);
       setFormData({...formData, title: '', location: '', price: '', available: '', impactDepth: ''});
-    }, 1500);
+    } catch (e) {
+      console.error("Upload failed", e);
+      setIsUploading(false);
+    }
   };
 
   return (
@@ -146,7 +153,7 @@ export default function SellerHub() {
                <div className="space-y-4">
                  <div className="flex justify-between items-center bg-black/30 p-3 rounded border border-white/5">
                    <div className="flex items-center gap-2"><Factory size={16} className="text-primary"/> <span className="text-sm">Active Listings</span></div>
-                   <span className="font-mono font-bold">0</span>
+                   <span className="font-mono font-bold">{activeCount}</span>
                  </div>
                  <div className="flex justify-between items-center bg-black/30 p-3 rounded border border-white/5">
                    <div className="flex items-center gap-2"><TreePine size={16} className="text-blue-400"/> <span className="text-sm">Tons Sold</span></div>
@@ -167,6 +174,48 @@ export default function SellerHub() {
                  <p className="text-xs text-gray-400">• Puro.earth</p>
                </div>
             </div>
+         </div>
+      </div>
+
+      {/* Your Active Listings Table */}
+      <div className="max-w-4xl mx-auto w-full px-6 pb-12">
+         <h3 className="text-xl font-bold mb-4 font-mono flex items-center gap-2">
+           <TreePine className="text-primary" size={24} /> YOUR ACTIVE LISTINGS
+         </h3>
+         
+         <div className="glass-panel border border-white/10 rounded-xl overflow-hidden">
+            {myProjects.length === 0 ? (
+               <div className="p-8 text-center text-gray-500 font-mono text-sm">
+                 No active projects found. Submit a listing above.
+               </div>
+            ) : (
+               <div className="overflow-x-auto">
+                  <table className="w-full text-left text-sm text-gray-300">
+                    <thead className="bg-white/5 text-xs uppercase font-bold text-gray-500">
+                      <tr>
+                        <th className="px-6 py-4">Project Title</th>
+                        <th className="px-6 py-4">Type</th>
+                        <th className="px-6 py-4">Volume</th>
+                        <th className="px-6 py-4">Price / Ton</th>
+                        <th className="px-6 py-4 text-right">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/5">
+                      {myProjects.map(proj => (
+                        <tr key={proj.id} className="hover:bg-white/5 transition-colors">
+                          <td className="px-6 py-4 font-medium text-white">{proj.title}</td>
+                          <td className="px-6 py-4">{proj.type}</td>
+                          <td className="px-6 py-4 font-mono">{proj.available.toLocaleString()} tCO₂e</td>
+                          <td className="px-6 py-4 font-mono text-primary">${proj.price.toFixed(2)}</td>
+                          <td className="px-6 py-4 text-right">
+                            <span className="bg-green-500/10 text-green-400 border border-green-500/20 px-2 py-1 rounded text-xs">Live</span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+               </div>
+            )}
          </div>
       </div>
     </div>

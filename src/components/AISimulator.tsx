@@ -96,7 +96,7 @@ export default function AISimulator() {
       </div>
 
       {/* Main Results Area */}
-      <div className="flex-1 p-8 overflow-y-auto custom-scrollbar">
+      <div className="flex-1 p-8 pb-24 overflow-y-auto custom-scrollbar">
         {!resultsData && !analyzing && (
            <div className="h-full flex flex-col items-center justify-center text-gray-500">
              <Activity size={48} className="mb-4 opacity-20" />
