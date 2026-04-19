@@ -15,6 +15,38 @@
   - User selects region/goals → AI suggests optimal new industrial zones, relocation priorities, pollution-control upgrades
   - Show before/after metrics (emissions ↓, GDP/production ↑, CO₂ sequestered)
 - Add India-focused initial view + realistic mock data
+🟡 Phase 2 — Advanced Map & AI Recommender (status check: 🔄 NEXT IN PIPELINE / Hackathon Demo)
+Goal: Make the AI Simulator intelligent by adding location recommendations and regulatory awareness.
+Dataflow:
+
+User fills inputs in AISimulator.tsx:
+Region
+Industry Type
+Budget Cap
+
+Frontend sends these parameters to the LLM using the hard-coded prompt above.
+The LLM returns structured JSON with:
+Emission reduction plan + steps + ROI for current location
+Ranked alternative locations (with clear reasoning)
+Government permission status for each location (locked/reserved areas mentioned only with valid reason)
+Optional alternative industry suggestions
+
+The app displays:
+Charts and steps for emission reduction
+Comparison table or cards for ranked locations
+Color-coded map markers for recommended locations
+Warning flags for any government-restricted zones
+
+
+Key New Features Added:
+
+The AI now recommends better locations for the chosen industry type.
+It understands real Indian industrial and agricultural land-use realities.
+It flags restricted areas with proper reasons (eco-sensitive zones, CRZ, agriculture reserved land, etc.).
+All recommendations are ranked for easy decision making.
+
+Data Storage: Still ephemeral (results disappear on refresh).
+This version clearly shows the new capabilities you added for the hackathon checkpoint.
 
 **Phase 3 — Carbon Credit Marketplace (Checkpoint 3)**
 - Build clean Marketplace page with grid/list of credits

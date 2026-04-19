@@ -24,4 +24,5 @@ export interface LocationData {
   suitability: SuitabilityLevel;
   
   suggestions: string[];
+  permissionStatus?: string;
 }

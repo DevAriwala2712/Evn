@@ -7,7 +7,8 @@ export const INDIA_MOCK_DATA: LocationData[] = [
     emission: "Critical", impact: "Severe Red", aqi: 410, type: "Heavy Manufacturing",
     climateRiskType: "Heatwave", climateRiskLevel: "Severe",
     bestGreenTech: "Solar", suitability: "Optimal",
-    suggestions: ["Install Electrostatic Precipitators", "Deploy Utility-scale Solar Array", "Mandate BS-VI transport"]
+    suggestions: ["Install Electrostatic Precipitators", "Deploy Utility-scale Solar Array", "Mandate BS-VI transport"],
+    permissionStatus: "Locked (Critically Polluted Area)"
   },
   {
     id: 2, position: [29.9457, 78.1642], name: "Haridwar SIDCUL",
@@ -37,7 +38,8 @@ export const INDIA_MOCK_DATA: LocationData[] = [
     emission: "Critical", impact: "Severe Red", aqi: 190, type: "Chemical Processing",
     climateRiskType: "Flood", climateRiskLevel: "Severe",
     bestGreenTech: "Carbon Capture", suitability: "Optimal",
-    suggestions: ["Implement Carbon Capture (CCS)", "Mangrove buffer zone restoration", "Offshore wind feasibility study"]
+    suggestions: ["Implement Carbon Capture (CCS)", "Mangrove buffer zone restoration", "Offshore wind feasibility study"],
+    permissionStatus: "Requires Clearance (CRZ)"
   },
   {
     id: 5, position: [23.0225, 72.5714], name: "Ahmedabad Mills",
@@ -74,7 +76,8 @@ export const INDIA_MOCK_DATA: LocationData[] = [
     emission: "Low", impact: "Green", aqi: 85, type: "IT / Electronics",
     climateRiskType: "Drought", climateRiskLevel: "Severe",
     bestGreenTech: "Solar", suitability: "Optimal",
-    suggestions: ["Deep Rainwater Harvesting", "100% LED phase-in", "AI-optimized HVAC systems"]
+    suggestions: ["Deep Rainwater Harvesting", "100% LED phase-in", "AI-optimized HVAC systems"],
+    permissionStatus: "Locked (Water Depleted Zone)"
   },
   {
     id: 10, position: [13.0827, 80.2707], name: "Chennai Auto & Port Hub",
@@ -102,7 +105,8 @@ export const INDIA_MOCK_DATA: LocationData[] = [
     emission: "Medium", impact: "Yellow", aqi: 95, type: "Marine / Petro",
     climateRiskType: "Flood", climateRiskLevel: "Severe",
     bestGreenTech: "Hydro", suitability: "Viable",
-    suggestions: ["Shore-to-ship power", "Wave energy pilot project", "Mangrove afforestation"]
+    suggestions: ["Shore-to-ship power", "Wave energy pilot project", "Mangrove afforestation"],
+    permissionStatus: "Locked (Eco-Sensitive Zone)"
   },
 
   // East India
@@ -132,7 +136,8 @@ export const INDIA_MOCK_DATA: LocationData[] = [
     emission: "High", impact: "Red", aqi: 200, type: "Logistics / Mining",
     climateRiskType: "Flood", climateRiskLevel: "Severe",
     bestGreenTech: "Wind", suitability: "Optimal",
-    suggestions: ["Cyclone resistant wind arrays", "Dust suppression at port", "Automated mineral conveyors"]
+    suggestions: ["Cyclone resistant wind arrays", "Dust suppression at port", "Automated mineral conveyors"],
+    permissionStatus: "Locked (CRZ-I Highly Sensitive)"
   },
   {
     id: 18, position: [26.1445, 91.7362], name: "Guwahati Refinery & Tea",
@@ -162,6 +167,7 @@ export const INDIA_MOCK_DATA: LocationData[] = [
     emission: "High", impact: "Red", aqi: 260, type: "Mining Extraction",
     climateRiskType: "Heatwave", climateRiskLevel: "Severe",
     bestGreenTech: "Solar", suitability: "Optimal",
-    suggestions: ["Dust control mist cannons", "Renewable grid power for crushers", "Dry processing methods"]
+    suggestions: ["Dust control mist cannons", "Renewable grid power for crushers", "Dry processing methods"],
+    permissionStatus: "Locked (Aravalli Range Mining Ban)"
   }
 ];
