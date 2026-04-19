@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap, CircleMarker } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { Shield, Leaf, Factory, Zap, TrendingDown, Layers, Activity, AlertTriangle } from 'lucide-react';
+import { Shield, Leaf, Factory, Zap, TrendingDown, Layers, Activity, AlertTriangle, Briefcase } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { INDIA_MOCK_DATA } from './data/mockData';
 
@@ -10,6 +10,8 @@ import { INDIA_MOCK_DATA } from './data/mockData';
 import AISimulator from './components/AISimulator';
 import CarbonMarket from './components/CarbonMarket';
 import ImpactDashboard from './components/ImpactDashboard';
+import SellerHub from './components/SellerHub';
+import { MarketProvider } from './contexts/MarketContext';
 
 // Fix Leaflet icons
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -78,7 +80,7 @@ function MapZoomController() {
 }
 
 function App() {
-  const [activeTab, setActiveTab] = useState<'map' | 'simulate' | 'market' | 'dashboard'>('map');
+  const [activeTab, setActiveTab] = useState<'map' | 'simulate' | 'market' | 'dashboard' | 'seller'>('map');
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   // Layer states
@@ -92,7 +94,8 @@ function App() {
   const avgAqi = Math.round(INDIA_MOCK_DATA.reduce((acc, curr) => acc + curr.aqi, 0) / INDIA_MOCK_DATA.length);
 
   return (
-    <div className="flex h-screen w-full bg-black text-white overflow-hidden font-sans">
+    <MarketProvider>
+      <div className="flex h-screen w-full bg-black text-white overflow-hidden font-sans">
 
       {/* Sidebar */}
       <motion.div
@@ -112,6 +115,7 @@ function App() {
           <NavButton active={activeTab === 'map'} onClick={() => setActiveTab('map')} icon={<Activity size={18} />} label="Eco-Map Data" />
           <NavButton active={activeTab === 'simulate'} onClick={() => setActiveTab('simulate')} icon={<Factory size={18} />} label="AI Simulator" />
           <NavButton active={activeTab === 'market'} onClick={() => setActiveTab('market')} icon={<Leaf size={18} />} label="Carbon Market" />
+          <NavButton active={activeTab === 'seller'} onClick={() => setActiveTab('seller')} icon={<Briefcase size={18} />} label="Seller Hub" />
           <NavButton active={activeTab === 'dashboard'} onClick={() => setActiveTab('dashboard')} icon={<TrendingDown size={18} />} label="Impact Dashboard" />
 
           {activeTab === 'map' && (
@@ -262,10 +266,17 @@ function App() {
             </motion.div>
           )}
 
+          {activeTab === 'seller' && (
+            <motion.div key="seller" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="w-full h-full">
+              <SellerHub />
+            </motion.div>
+          )}
+
         </AnimatePresence>
       </div>
     </div>
-    </div >
+    </div>
+    </MarketProvider>
   );
 }
 
