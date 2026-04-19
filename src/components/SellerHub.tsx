@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { UploadCloud, CheckCircle2, Factory, TreePine, Leaf, DollarSign } from 'lucide-react';
+import { UploadCloud, CheckCircle2, Factory, TreePine, Leaf, IndianRupee } from 'lucide-react';
 import { useMarket, type Project } from '../contexts/MarketContext';
 
 export default function SellerHub() {
@@ -111,10 +111,10 @@ export default function SellerHub() {
                       <input required type="number" value={formData.available} onChange={e => setFormData({...formData, available: e.target.value})} placeholder="e.g. 50000" className="w-full bg-black/50 border border-white/10 p-3 rounded focus:outline-none focus:border-primary text-sm" />
                    </div>
                    <div>
-                      <label className="block text-xs font-bold text-gray-400 py-1 uppercase tracking-wider">Price per Ton ($)</label>
+                      <label className="block text-xs font-bold text-gray-400 py-1 uppercase tracking-wider">Price per Ton (₹)</label>
                       <div className="relative">
-                        <DollarSign size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
-                        <input required type="number" step="0.01" value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} placeholder="e.g. 15.50" className="w-full bg-black/50 border border-white/10 p-3 pl-9 rounded focus:outline-none focus:border-primary text-sm" />
+                        <IndianRupee size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+                        <input required type="number" step="1" value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} placeholder="e.g. 1250" className="w-full bg-black/50 border border-white/10 p-3 pl-9 rounded focus:outline-none focus:border-primary text-sm" />
                       </div>
                    </div>
                  </div>
@@ -147,7 +147,7 @@ export default function SellerHub() {
          <div className="space-y-6">
             <div className="glass-panel p-6 rounded-xl border border-white/10">
                <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4 border-b border-white/5 pb-2">Seller Metrics</h4>
-               <p className="text-3xl font-mono text-white mb-1">$0.00</p>
+               <p className="text-3xl font-mono text-white mb-1">₹0</p>
                <p className="text-xs text-green-400 mb-6">Total Payouts (YTD)</p>
 
                <div className="space-y-4">
@@ -206,7 +206,7 @@ export default function SellerHub() {
                           <td className="px-6 py-4 font-medium text-white">{proj.title}</td>
                           <td className="px-6 py-4">{proj.type}</td>
                           <td className="px-6 py-4 font-mono">{proj.available.toLocaleString()} tCO₂e</td>
-                          <td className="px-6 py-4 font-mono text-primary">${proj.price.toFixed(2)}</td>
+                          <td className="px-6 py-4 font-mono text-primary">₹{proj.price.toLocaleString()}</td>
                           <td className="px-6 py-4 text-right">
                             <span className="bg-green-500/10 text-green-400 border border-green-500/20 px-2 py-1 rounded text-xs">Live</span>
                           </td>

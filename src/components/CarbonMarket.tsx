@@ -13,7 +13,7 @@ export default function CarbonMarket() {
   const [walletConnected, setWalletConnected] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [activeCategory, setActiveCategory] = useState('All');
-  const [maxPrice, setMaxPrice] = useState(300);
+  const [maxPrice, setMaxPrice] = useState(25000);
   const [isCompareModalOpen, setIsCompareModalOpen] = useState(false);
 
   // Filters
@@ -38,7 +38,7 @@ export default function CarbonMarket() {
   };
 
   const handleCheckoutAggregate = () => {
-     alert(`Simulated checkout for ${getTotalCredits().toLocaleString()} tCO2e across ${cartItems.length} organizations. Total Cost: $${getTotalCost().toFixed(2)}\n\n(A real checkout would span GetBags SDK or Stripe Web3 infrastructure here)`);
+     alert(`Simulated checkout for ${getTotalCredits().toLocaleString()} tCO2e across ${cartItems.length} organizations. Total Cost: ₹${getTotalCost().toLocaleString()}\n\n(A real checkout would span GetBags SDK or Stripe Web3 infrastructure here)`);
   };
 
   return (
@@ -63,9 +63,7 @@ export default function CarbonMarket() {
                  </div>
                  <div className="flex flex-col items-start">
                      <span className="text-[10px] text-gray-400 uppercase tracking-wider font-bold">Due</span>
-                     <span className="text-lg font-mono text-white flex items-center gap-2">
-                       ${getTotalCost().toFixed(2)}
-                     </span>
+                       ₹{getTotalCost().toLocaleString()}
                  </div>
               </div>
               <button 
@@ -119,10 +117,10 @@ export default function CarbonMarket() {
 
             <div className="mb-6">
                <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 flex justify-between">
-                 Max Price/Ton <span>${maxPrice}</span>
+                 Max Price/Ton <span>₹{maxPrice}</span>
                </label>
                <input 
-                  type="range" min="5" max="300" step="5"
+                  type="range" min="400" max="25000" step="100"
                   value={maxPrice} onChange={e => setMaxPrice(Number(e.target.value))}
                   className="w-full accent-primary" 
                />
@@ -175,7 +173,7 @@ export default function CarbonMarket() {
                       <div className="flex justify-between items-center mb-5 mt-auto bg-black/40 p-2 rounded-lg border border-white/5">
                         <div>
                           <p className="text-[9px] text-gray-500 uppercase tracking-wider mb-0.5">Price / tCO₂e</p>
-                          <p className="text-lg font-mono text-white leading-none">${proj.price.toFixed(2)}</p>
+                          <p className="text-lg font-mono text-white leading-none">₹{proj.price.toLocaleString()}</p>
                         </div>
                         <div className="text-right">
                           <p className="text-[9px] text-gray-500 uppercase tracking-wider mb-0.5">Available</p>
@@ -289,7 +287,7 @@ export default function CarbonMarket() {
                             <div className="grid grid-cols-2 gap-4">
                                <div>
                                  <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Price/Ton</p>
-                                 <p className={`text-xl font-mono font-bold ${isLowestCost ? 'text-primary' : 'text-gray-300'}`}>${proj.price.toFixed(2)}</p>
+                                 <p className={`text-xl font-mono font-bold ${isLowestCost ? 'text-primary' : 'text-gray-300'}`}>₹{proj.price.toLocaleString()}</p>
                                </div>
                                <div>
                                  <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Supply Risk</p>
